@@ -1,17 +1,12 @@
 package com.myyh.security.service;
 
-import cn.hutool.core.util.PageUtil;
 import com.myyh.security.config.SecurityProperties;
 import com.myyh.security.security.vo.JwtUser;
 import com.myyh.security.security.vo.OnlineUser;
-import com.myyh.utils.EncryptUtils;
-import com.myyh.utils.FileUtil;
-import com.myyh.utils.RedisUtils;
-import com.myyh.utils.StringUtils;
+import com.myyh.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -40,12 +35,13 @@ public class OnlineUserService {
      * @param request /
      */
     public void save(JwtUser jwtUser, String token, HttpServletRequest request){
+        String job = jwtUser.getDept() + "/" + jwtUser.getJob();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
         OnlineUser onlineUser = null;
         try {
-            onlineUser = new OnlineUser(jwtUser.getUsername(), browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
+            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), job, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,11 +56,10 @@ public class OnlineUserService {
      */
     public Map<String,Object> getAll(String filter, Pageable pageable){
         List<OnlineUser> onlineUsers = getAll(filter);
-//        return PageUtil.toPage(
-//                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),onlineUsers),
-//                onlineUsers.size()
-//        );
-        return  null;
+        return PageUtil.toPage(
+                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),onlineUsers),
+                onlineUsers.size()
+        );
     }
 
     /**
@@ -120,6 +115,7 @@ public class OnlineUserService {
         for (OnlineUser user : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("用户名", user.getUserName());
+            map.put("岗位", user.getJob());
             map.put("登录IP", user.getIp());
             map.put("登录地点", user.getAddress());
             map.put("浏览器", user.getBrowser());

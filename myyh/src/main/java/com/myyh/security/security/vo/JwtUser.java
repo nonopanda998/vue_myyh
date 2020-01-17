@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
@@ -20,59 +19,67 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class JwtUser implements UserDetails {
 
-    private String avatar;
+    private final Long id;
 
-    private String account;
+    private final String username;
 
-    private String password;
+    private final String nickName;
 
-    private String salt;
+    private final String sex;
 
-    private String userName;
+    @JsonIgnore
+    private final String password;
 
-    private Date birthday;
+    private final String avatar;
 
-    private Integer sex;
+    private final String email;
 
-    private String email;
+    private final String phone;
 
-    private String phone;
+    private final String dept;
 
-    private String roleid;
+    private final String job;
 
-    private Long deptid;
+    @JsonIgnore
+    private final Collection<GrantedAuthority> authorities;
 
-    private Integer status;
+    private final boolean enabled;
 
-    private Integer version;
+    private Timestamp createTime;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+    @JsonIgnore
+    private final Date lastPasswordResetDate;
 
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
+    }
+
+    public Collection getRoles() {
+        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
     }
 }

@@ -3,6 +3,7 @@ package com.myyh.security.rest;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import com.myyh.annotation.AnonymousAccess;
 import com.myyh.exception.BadRequestException;
 import com.myyh.security.config.SecurityProperties;
 import com.myyh.security.security.TokenProvider;
@@ -64,6 +65,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
+    @AnonymousAccess
     public ResponseEntity<Object> login(@Validated @RequestBody AuthUser authUser, HttpServletRequest request){
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
@@ -99,13 +101,13 @@ public class AuthController {
         }
         return ResponseEntity.ok(authInfo);
     }
-
+    @AnonymousAccess
     @GetMapping(value = "/info")
     public ResponseEntity<Object> getUserInfo(){
         JwtUser jwtUser = (JwtUser)userDetailsService.loadUserByUsername(SecurityUtils.getUsername());
         return ResponseEntity.ok(jwtUser);
     }
-
+    @AnonymousAccess
     @GetMapping(value = "/code")
     public ResponseEntity<Object> getCode(){
         // 算术类型 https://gitee.com/whvse/EasyCaptcha
@@ -124,7 +126,7 @@ public class AuthController {
         }};
         return ResponseEntity.ok(imgResult);
     }
-
+    @AnonymousAccess
     @DeleteMapping(value = "/logout")
     public ResponseEntity<Object> logout(HttpServletRequest request){
         onlineUserService.logout(tokenProvider.getToken(request));
