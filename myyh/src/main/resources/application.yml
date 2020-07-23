@@ -1,61 +1,54 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.16.30.46:3306/web-flash?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: Hxjr2018.
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 15
-      auto-commit: true
-      idle-timeout: 30000
-      pool-name: HikariCP
-      max-lifetime: 1800000
-      connection-timeout: 30000
-      connection-test-query: SELECT 1
-      initialization-fail-timeout: 1000
-  freemarker:
-    check-template-location: false
-
-
-
-  profiles:
-    active: dev
-  jackson:
-    time-zone: GMT+8
-  data:
-    redis:
-      repositories:
-        enabled: false
-
+  #redis配置,默认情况下redis会创建16个数据库，Redis客户端的目标数据库为0号数据库，但客户端可以通过执行SELECT命令来切换目标数据库。
   redis:
     host: 192.168.202.102
-    database: 0
-    port: 6379
     password:
-    lettuce:
-      shutdown-timeout: 5000
+    port: 6379
+    timeout: 6000
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.16.30.46:3306/redis?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+#    url: jdbc:mysql://localhost:3306/redis?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: Hxjr2018.
 
+    #hikari数据库连接池
+    hikari:
+      pool-name: HXJR_HikariCP
+      minimum-idle: 5 #最小空闲连接数量
+      idle-timeout: 180000 #空闲连接存活最大时间，默认600000（10分钟）
+      maximum-pool-size: 10 #连接池最大连接数，默认是10
+      auto-commit: true  #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      max-lifetime: 1800000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      connection-timeout: 30000 #数据库连接超时时间,默认30秒，即30000
+      connection-test-query: SELECT 1
+  cache:
+    #ehcache配置文件路径
+    ehcache:
+      config: classpath:/ehcache/ehcache.xml
+    #指定缓存类型，可加可不加
+  #    type: ehcache
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        open-in-view: true
-
-  task:
-    execution:
-      pool:
-        core-size: 10
-        max-size: 30
-        keep-alive: 60
-        queue-capacity: 50
-
+    show-sql: false  #在日志里显示执行的sql语句
+    database: mysql
+    hibernate:
+      ddl-auto: update #每次启动项目检测表结构有变化的时候会新增字段，表不存在时会新建，如果指定create，则每次启动项目都会清空数据并删除表，再新建
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl #指定jpa的自动表生成策略，驼峰自动映射为下划线格式
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect    #使用InnoDB引擎
+  aop:
+    auto: true
+    proxy-target-class: true
 server:
   port: 8080
   servlet:
-    context-path: /myyh
+    context-path: /
 
+#登录验证码有效时间/分钟
+loginCode:
+  expiration: 5
+
+#jwt
 jwt:
   header: Authorization
   # 令牌前缀
@@ -68,33 +61,41 @@ jwt:
   online-key: online-token
   # 验证码
   code-key: code-key
-#\u767B\u5F55\u56FE\u5F62\u9A8C\u8BC1\u7801\u6709\u6548\u65F6\u95F4/\u5206\u949F
-loginCode:
-  expiration: 2
 
 
-
-
-
-
-
-
-
-
-
-
-#\u5BC6\u7801\u52A0\u5BC6\u4F20\u8F93\uFF0C\u524D\u7AEF\u516C\u94A5\u52A0\u5BC6\uFF0C\u540E\u7AEF\u79C1\u94A5\u89E3\u5BC6
+#密码加密传输，前端公钥加密，后端私钥解密
 rsa:
-  private_key: MIIBUwIBADANBgkqhkiG9w0BAQEFAASCAT0wggE5AgEAAkEA0vfvyTdGJkdbHkB8mp0f3FE0GYP3AYPaJF7jUd1M0XxFSE2ceK3k2kw20YvQ09NJKk+OMjWQl9WitG9pB6tSCQIDAQABAkA2SimBrWC2/wvauBuYqjCFwLvYiRYqZKThUS3MZlebXJiLB+Ue/gUifAAKIg1avttUZsHBHrop4qfJCwAI0+YRAiEA+W3NK/RaXtnRqmoUUkb59zsZUBLpvZgQPfj1MhyHDz0CIQDYhsAhPJ3mgS64NbUZmGWuuNKp5coY2GIj/zYDMJp6vQIgUueLFXv/eZ1ekgz2Oi67MNCk5jeTF2BurZqNLR3MSmUCIFT3Q6uHMtsB9Eha4u7hS31tj1UWE+D+ADzp59MGnoftAiBeHT7gDMuqeJHPL4b+kC+gzV4FGTfhR9q3tTbklZkD2A==
-
-
-
-
-
-  # 文件存储路径
+  private_key: MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEA3zoHVXjt5RGQ9v1IRjyIEio0SVE7DjY2+rQMFM3YUBLUZ4ySWYKc1DoOlGOvOR80yuZvm8KtTAOIzvVbZGETJQIDAQABAkEA1NkmCQ/n9pYLXhcghShOrtNjS82Su/hh8CchpeypJ58kdUT12UrZGrsLStzqhu6InwrrQwvi+Rg0pYJ4bIOhuQIhAPk+wVbF0WzaUy0fJYqjemQAP99NOqoO0CgCBeFMLka/AiEA5UbCWtM+qvnT2PhX0sAY4kUJN9Xlf41Z3PiomMyMoxsCIQC6FTlBcIVPsJyCxos/u5eny2vkaoNO7apJBGGheD/gfwIhANlx2WQgUp//Hl75cPlsvGzkQpDU6LqnCWIb5nI8FOmfAiBuiO2jOMnuq2dqwKmyPoBTQhNdzN23QDiljyew3HNbGg==
+# 文件存储路径
 file:
-  path: C:\eladmin\file\
-  avatar: C:\eladmin\avatar\
+  path: F:\eladmin\file\
+  avatar: F:\eladmin\avatar\
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5
+
+
+#logback配置
+logging:
+  file:
+    #每个日志文件的大小
+    #轮转保存3天
+    name: hxjr_admin.log
+    max-size: 5MB
+    max-history: 3
+    #和name一起配置只会生效一个，这里使用name
+    path: D:/admin/log
+  pattern:
+#    level: 用户:%X{user:-未登录} %5p
+    level: :%X{user:-_HXJR} %10p
+
+    #日志级别设置，所有service打印debug级别日志
+  level:
+    root: info
+    hxjr: info
+    tomcat: info
+    org.hibernate: info
+    #分组打印，tomcat，和system下的所有日志
+  group:
+    tomcat: org.apache.catalina, org.apache.coyote, org.apache.tomcat
+    hxjr: com.myyh.system
