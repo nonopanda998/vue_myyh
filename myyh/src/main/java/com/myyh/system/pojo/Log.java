@@ -1,6 +1,10 @@
 package com.myyh.system.pojo;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,44 +17,45 @@ import java.util.Date;
 @Setter
 @Entity
 @ToString
+@TableName("t_log")
 @Table(name="t_log", indexes = {
         @Index(name = "id", columnList = "id", unique = true)})
 public class Log {
 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Id
-    @Column(columnDefinition="bigint(20) NOT NULL")
+    @TableId(type = IdType.AUTO)
     private  Long  id;
 
-    @Column(name = "user_name",columnDefinition = "varchar(100) default '' comment '用户名'")
+    @TableField("user_name")
     private String username;
 
-    @Column(name = "ip", columnDefinition = "varchar(100) default '' comment 'ip'")
+    @TableField("ip")
     private String ip;
 
-    @Column(name = "browser",columnDefinition = "varchar(255) DEFAULT NULL   comment '浏览器'")
+    @TableField("browser")
     private String browser;
 
-    @Column(name = "trade_name",columnDefinition = "varchar(255) DEFAULT NULL   comment '交易名称'")
+    @TableField("trade_name")
     private String tradeName;
 
-    @Column(name = "method", columnDefinition = "varchar(255) DEFAULT NULL   comment '请求方法'")
+    @TableField("method")
     private String method;
 
-    @Column(name = "params", columnDefinition = "text DEFAULT NULL   comment '请求参数'")
+    @TableField("params")
     private String params;
 
-    @Column(name = "result", columnDefinition = "varchar(25) DEFAULT NULL   comment '访问结果：成功、失败'")
+    @TableField("result")
     private String result;
 
-    @Column(name = "time", columnDefinition = " bigint(20) DEFAULT NULL comment '请求耗时毫秒'")
+    @TableField("time")
     private Long time;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Column(name = "create_time", nullable = false)
+    @TableField("create_time")
     private Date createTime;
 
-    @Column(name = "exceptionMsg", columnDefinition = " text DEFAULT NULL comment '错误信息'")
+    @TableField("exception_msg")
     private String exceptionMsg;
 
     public Log(String username, String ip, String browser, String tradeName, String method, String params, String result, Long time, Date createTime, String exceptionMsg) {

@@ -7,14 +7,14 @@ spring:
     timeout: 6000
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://10.16.30.46:3306/redis?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://localhost:3306/wx?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
 #    url: jdbc:mysql://localhost:3306/redis?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
     username: root
-    password: Hxjr2018.
+    password: 123456
 
     #hikari数据库连接池
     hikari:
-      pool-name: HXJR_HikariCP
+      pool-name: RY_HikariCP
       minimum-idle: 5 #最小空闲连接数量
       idle-timeout: 180000 #空闲连接存活最大时间，默认600000（10分钟）
       maximum-pool-size: 10 #连接池最大连接数，默认是10
@@ -80,22 +80,22 @@ logging:
   file:
     #每个日志文件的大小
     #轮转保存3天
-    name: hxjr_admin.log
+    name: ry_admin.log
     max-size: 5MB
     max-history: 3
     #和name一起配置只会生效一个，这里使用name
     path: D:/admin/log
   pattern:
 #    level: 用户:%X{user:-未登录} %5p
-    level: :%X{user:-_HXJR} %10p
+    level: :%X{user:-_MYYH} %10p
 
     #日志级别设置，所有service打印debug级别日志
   level:
     root: info
-    hxjr: info
+    ry: info
     tomcat: info
     org.hibernate: info
     #分组打印，tomcat，和system下的所有日志
   group:
     tomcat: org.apache.catalina, org.apache.coyote, org.apache.tomcat
-    hxjr: com.myyh.system
+    ry: com.myyh.system

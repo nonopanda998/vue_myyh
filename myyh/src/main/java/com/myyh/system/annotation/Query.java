@@ -15,12 +15,12 @@ public @interface Query {
         Type type() default Type.EQUAL;
 
         /**
-         * 连接查询的属性名，如User类中的dept
+         * 连接查询的属性名，如User类中的dept，MyBatis不支持
          */
         String joinName() default "";
 
         /**
-         * 默认左连接
+         * 默认左连接，MyBatis不支持
          */
         Join join() default Join.LEFT;
 
@@ -52,10 +52,12 @@ public @interface Query {
             ,BETWEEN
             // 不为空
             ,NOT_NULL
+            //大于
+            ,GREATER_THAN_NQ
         }
 
         /**
-         * 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询
+         * 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询，MyBatis不支持
          */
         enum Join {
             /**左右连接 */

@@ -1,12 +1,14 @@
 package com.myyh.system.service;
 
-import com.myyh.system.dao.LogDao;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.myyh.system.mapper.LogMapper;
 import com.myyh.system.pojo.Log;
 import com.myyh.system.pojo.vo.LogQuery;
-import com.myyh.system.pojo.vo.PageParameter;
+import com.myyh.system.pojo.vo.PageQuery;
 import com.myyh.system.util.QueryHelp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,19 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class LogService {
 
     @Autowired
-    private LogDao logDao;
+    private LogMapper logDao;
 
 
     /**
      * 分页查询日志
      * @return
-     * @param pageRequest
+     * @param pageQuery
      */
-    public Page<Log> list(PageParameter pageRequest) {
-        LogQuery searchKey = (LogQuery)pageRequest.getSearchKey(LogQuery.class);
-        Page<Log> all = logDao.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, searchKey, criteriaBuilder)
-                , pageRequest.toPageable());
-        return  all;
+    public IPage list(PageQuery<LogQuery,Log> pageQuery) {
+        LogQuery searchKey = pageQuery.getSearchKey(LogQuery.class);
+        Wrapper<Log> query = QueryHelp.getQuery(searchKey,new Log());
+        Page<Log> logPage = logDao.selectPage(pageQuery.getPage(), query);
+        Page<Log> sortPage = pageQuery.getSortPage(logPage);
+        return sortPage;
     }
 
 
@@ -37,6 +40,6 @@ public class LogService {
      */
     @Transactional
     public void save(Log log) {
-        logDao.save(log);
+        logDao.insert(log);
     }
 }

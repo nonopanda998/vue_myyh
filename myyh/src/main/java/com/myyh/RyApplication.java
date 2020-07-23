@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication
-@MapperScan("com.myyh.system.mapper")
+@MapperScan("com.myyh.system.mapper*")
 @EnableTransactionManagement
 public class RyApplication {
 

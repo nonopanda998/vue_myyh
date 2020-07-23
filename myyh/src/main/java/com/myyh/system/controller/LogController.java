@@ -3,8 +3,9 @@ package com.myyh.system.controller;
 
 import com.myyh.system.annotation.LogInfo;
 import com.myyh.system.pojo.Log;
-import com.myyh.system.pojo.vo.PageParameter;
-import com.myyh.system.pojo.vo.PageResult;
+import com.myyh.system.pojo.vo.LogQuery;
+import com.myyh.system.pojo.vo.PageQuery;
+import com.myyh.system.pojo.vo.QPageResult;
 import com.myyh.system.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,8 +23,8 @@ public class LogController {
     @PreAuthorize("@ry.has('log.list')")
     @LogInfo("分页查询日志")
     @GetMapping("/pagelist")
-    public PageResult<Log> list(PageParameter parameter){
-        return  new PageResult<Log>(logService.list(parameter));
+    public QPageResult<Log> list(PageQuery<LogQuery,Log> pageQuery){
+        return  new QPageResult<Log>(logService.list(pageQuery));
     }
 
 
