@@ -13,7 +13,7 @@ public class LogQuery {
     /**
      * 模糊查询
      */
-    @Query(type = Query.Type.INNER_LIKE,propName = "username")
+    @Query(type = Query.Type.INNER_LIKE,propName = "user_name")
     private String username;
 
     /**
@@ -25,12 +25,12 @@ public class LogQuery {
     /**
      * 模糊查询
      */
-    @Query(type = Query.Type.INNER_LIKE,propName = "tradeName")
+    @Query(type = Query.Type.INNER_LIKE,propName = "trade_name")
     private String tradeName;
 
     /**
      * 时间，起始-结束
      */
-    @Query(type = Query.Type.BETWEEN)
+    @Query(type = Query.Type.BETWEEN,propName = "create_time")
     private List<Date> createTime;
 }

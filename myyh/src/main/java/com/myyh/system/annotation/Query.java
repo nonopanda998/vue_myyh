@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Query {
 
-        // 基本对象的属性名
+        // 基本对象的属性名,jpa拥有实体类映射数据库表的功能，mybatis需要手动映射所以Mybatis这里填写对应数据库表字段的属性名
         String propName() default "";
         // 查询方式
         Type type() default Type.EQUAL;

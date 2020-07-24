@@ -21,6 +21,12 @@
 
     <dependencies>
 
+        <!-- mybatis-plus sql打印 -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+        </dependency>
+
         <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
