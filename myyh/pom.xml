@@ -25,6 +25,7 @@
         <dependency>
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
+            <version>3.9.0</version>
         </dependency>
 
         <!-- mysql -->
@@ -181,7 +182,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.3.1.tmp</version>
+            <version>3.3.2</version>
         </dependency>
 
     </dependencies>

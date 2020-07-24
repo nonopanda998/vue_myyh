@@ -2,9 +2,14 @@ package com.myyh.system.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.myyh.system.annotation.Query;
+import com.myyh.system.pojo.Log;
+import com.myyh.system.pojo.vo.LogQuery;
+import com.myyh.system.pojo.vo.PageQuery;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.criteria.*;
@@ -170,12 +175,39 @@ public class QueryHelp {
 
 
     /**
-     * MyBatisPlus 构建QueryWrapper
-     * 不支持JOIN 关联查询
+     *     MyBatisPlus 构建QueryWrapper
+     *     不支持JOIN 关联查询
+     *
+     * @param query      查询对象
+     * @param pageQuery  查询参数
+     * @param classzz    查询对象字节码
+     * @param <Q>
+     * @param <T>
+     * @return
      */
     @SuppressWarnings("unchecked")
-    public static <Q, T> Wrapper<Q> getQuery(T query,Q classzz) {
+    public static <Q, T> Wrapper<Q> getQuery(T query, PageQuery<LogQuery, Log> pageQuery, Class classzz) {
         QueryWrapper<Q> wp = new QueryWrapper<Q>();
+        //排序设置
+        String sortField = pageQuery.getSortField();
+        String sqlSortField = null;
+        String sort = pageQuery.getSort();
+        if (!ObjectUtil.isEmpty(sortField)) {
+            //获取实体类字段
+            Field[] fields = classzz.getDeclaredFields();
+            Field sqlField = Arrays.stream(fields).filter(field -> field.getName().equalsIgnoreCase(sortField)).findAny().get();
+            boolean accessible = sqlField.isAccessible();
+            sqlField.setAccessible(true);
+            TableField annotation = sqlField.getAnnotation(TableField.class);
+            sqlSortField = annotation.value();
+            sqlField.setAccessible(accessible);
+
+            if (sort.toLowerCase().startsWith("desc")) {
+                wp.orderByDesc(sqlSortField);
+            } else {
+                wp.orderByAsc(sqlSortField);
+            }
+        }
         //查询条件为空则返回空类
         if (query == null) {
             return wp;
@@ -247,7 +279,7 @@ public class QueryHelp {
 
                         case BETWEEN:
                             List<Object> between = new ArrayList<>((List<Object>) val);
-                            wp.between(attributeName,between.get(0),between.get(1));
+                            wp.between(attributeName, between.get(0), between.get(1));
                             break;
                         default:
                             break;

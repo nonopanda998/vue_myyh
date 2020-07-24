@@ -2,6 +2,7 @@ package com.myyh.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.myyh.system.mapper.LogMapper;
 import com.myyh.system.pojo.Log;
@@ -27,10 +28,9 @@ public class LogService {
      */
     public IPage list(PageQuery<LogQuery,Log> pageQuery) {
         LogQuery searchKey = pageQuery.getSearchKey(LogQuery.class);
-        Wrapper<Log> query = QueryHelp.getQuery(searchKey,new Log());
+        Wrapper<Log> query = QueryHelp.getQuery(searchKey,pageQuery,Log.class);
         Page<Log> logPage = logDao.selectPage(pageQuery.getPage(), query);
-        Page<Log> sortPage = pageQuery.getSortPage(logPage);
-        return sortPage;
+        return logPage;
     }
 
 
