@@ -105,7 +105,6 @@ public class ControllerAop {
      * 封装异常信息，区分已知异常（自己抛出的）和未知异常
      */
     private ResultBean<?> handlerException(ProceedingJoinPoint pjp, Throwable e, String annotationLog, String methodName, String user, List<Object> args) {
-
         ResultBean<?> result = new ResultBean();
         // 已知异常，参数异常
         if (e instanceof IllegalArgumentException) {

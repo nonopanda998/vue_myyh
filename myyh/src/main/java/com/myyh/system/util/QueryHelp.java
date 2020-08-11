@@ -25,6 +25,16 @@ import java.util.List;
 @SuppressWarnings({"unchecked", "all"})
 public class QueryHelp {
 
+    /**
+     *  JPA 构建 Specification
+     *
+     * @param root  查询实体类
+     * @param query 查询对象
+     * @param cb    查询构造器
+     * @param <R>
+     * @param <Q>
+     * @return
+     */
     public static <R, Q> Predicate getPredicate(Root<R> root, Q query, CriteriaBuilder cb) {
         List<Predicate> list = new ArrayList<>();
 
@@ -186,7 +196,7 @@ public class QueryHelp {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <Q, T> Wrapper<Q> getQuery(T query, PageQuery<LogQuery, Log> pageQuery, Class classzz) {
+    public static <Q, T> Wrapper<Q> getQuery(T query, PageQuery<T, Q> pageQuery, Class classzz) {
         QueryWrapper<Q> wp = new QueryWrapper<Q>();
         //排序设置
         String sortField = pageQuery.getSortField();

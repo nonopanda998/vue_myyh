@@ -1,9 +1,0 @@
-1595555472859|1|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/wx?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false|SELECT 1|SELECT 1
-1595555474401|0|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/wx?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false|SELECT 1|SELECT 1
-
-
-
-
-
-
-

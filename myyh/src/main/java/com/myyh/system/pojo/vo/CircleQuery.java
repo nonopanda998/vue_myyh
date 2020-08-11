@@ -7,12 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class OrganizationQuery {
+public class CircleQuery {
 	/**
 	 * 模糊查询
 	 */
-	@Query(type = Query.Type.INNER_LIKE,propName = "orgName")
-	private String orgName;
+	@Query(type = Query.Type.INNER_LIKE,propName = "name")
+	private String name;
 
 	/**
 	 * 创建时间，起始-结束

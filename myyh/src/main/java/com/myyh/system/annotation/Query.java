@@ -9,58 +9,58 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Query {
 
-        // 基本对象的属性名,jpa拥有实体类映射数据库表的功能，mybatis需要手动映射所以Mybatis这里填写对应数据库表字段的属性名
-        String propName() default "";
-        // 查询方式
-        Type type() default Type.EQUAL;
+    // 基本对象的属性名,jpa拥有实体类映射数据库表的功能，mybatis需要手动映射所以Mybatis这里填写对应数据库表字段的属性名
+    String propName() default "";
+    // 查询方式
+    Type type() default Type.EQUAL;
 
-        /**
-         * 连接查询的属性名，如User类中的dept，MyBatis不支持
-         */
-        String joinName() default "";
+    /**
+     * 连接查询的属性名，如User类中的dept，MyBatis不支持
+     */
+    String joinName() default "";
 
-        /**
-         * 默认左连接，MyBatis不支持
-         */
-        Join join() default Join.LEFT;
+    /**
+     * 默认左连接，MyBatis不支持
+     */
+    Join join() default Join.LEFT;
 
-        /**
-         * 多字段模糊搜索，仅支持String类型字段，多个用逗号隔开, 如@Query(blurry = "email,username")
-         */
-        String blurry() default "";
+    /**
+     * 多字段模糊搜索，仅支持String类型字段，多个用逗号隔开, 如@Query(blurry = "email,username")
+     */
+    String blurry() default "";
 
-        enum Type {
-            // 相等
-            EQUAL
-            //  大于等于
-            , GREATER_THAN
-            //  小于等于
-            , LESS_THAN
-            //  中模糊查询
-            , INNER_LIKE
-            //  左模糊查询
-            , LEFT_LIKE
-            //  右模糊查询
-            , RIGHT_LIKE
-            //  小于
-            , LESS_THAN_NQ
-            // 包含
-            , IN
-            // 不等于
-            ,NOT_EQUAL
-            // between
-            ,BETWEEN
-            // 不为空
-            ,NOT_NULL
-            //大于
-            ,GREATER_THAN_NQ
-        }
+    enum Type {
+        // 相等
+        EQUAL
+        //  大于等于
+        , GREATER_THAN
+        //  小于等于
+        , LESS_THAN
+        //  中模糊查询
+        , INNER_LIKE
+        //  左模糊查询
+        , LEFT_LIKE
+        //  右模糊查询
+        , RIGHT_LIKE
+        //  小于
+        , LESS_THAN_NQ
+        // 包含
+        , IN
+        // 不等于
+        ,NOT_EQUAL
+        // between
+        ,BETWEEN
+        // 不为空
+        ,NOT_NULL
+        //大于
+        ,GREATER_THAN_NQ
+    }
 
-        /**
-         * 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询，MyBatis不支持
-         */
-        enum Join {
-            /**左右连接 */
-            LEFT, RIGHT
-        }
+    /**
+     * 适用于简单连接查询，复杂的请自定义该注解，或者使用sql查询，MyBatis不支持
+     */
+    enum Join {
+        /**左右连接 */
+        LEFT, RIGHT
+    }
 }

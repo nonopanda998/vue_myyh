@@ -7,10 +7,10 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import com.myyh.system.config.SecurityProperties;
 import com.myyh.system.config.TokenProvider;
-import com.myyh.system.dao.OrganizationDao;
+import com.myyh.system.dao.CircleDao;
 import com.myyh.system.dao.UserDao;
 import com.myyh.system.exception.BadRequestException;
-import com.myyh.system.pojo.Organization;
+import com.myyh.system.pojo.Circle;
 import com.myyh.system.pojo.Role;
 import com.myyh.system.pojo.vo.*;
 import com.myyh.system.pojo.User;
@@ -42,7 +42,7 @@ public class UserService {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private OrganizationDao organizationDao;
+    private CircleDao circleDao;
 
     @Autowired
     private RoleService roleService;
@@ -297,12 +297,12 @@ public class UserService {
         OnlineUser onlineUser = (OnlineUser) cacheManagerUtil.get("ONLINEUSER",token);
         User byUsername = userDao.findByUsername(onlineUser.getUserName());
         if(byUsername!=null){
-            Organization org = organizationDao.getOne(byUsername.getOid());
+            Circle org = circleDao.getOne(byUsername.getOid());
             // 日期格式化
             DateFormat dateTimeInstance = DateFormat.getDateTimeInstance();
             resoutMap.put("userName",byUsername.getUsername());
             resoutMap.put("nickName",byUsername.getNickName());
-            resoutMap.put("orgName",org.getOrgName());
+            resoutMap.put("orgName",org.getName());
             resoutMap.put("lastLoginIp",byUsername.getLastLoginIp());
             resoutMap.put("lastLogintime",dateTimeInstance.format(byUsername.getLastLoginTime()));
             resoutMap.put("phone",byUsername.getPhone());

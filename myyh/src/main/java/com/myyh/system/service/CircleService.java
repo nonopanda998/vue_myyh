@@ -1,9 +1,9 @@
 package com.myyh.system.service;
 
 import cn.hutool.core.lang.Assert;
-import com.myyh.system.dao.OrganizationDao;
-import com.myyh.system.pojo.Organization;
-import com.myyh.system.pojo.vo.OrganizationQuery;
+import com.myyh.system.dao.CircleDao;
+import com.myyh.system.pojo.Circle;
+import com.myyh.system.pojo.vo.CircleQuery;
 import com.myyh.system.pojo.vo.PageParameter;
 import com.myyh.system.util.QueryHelp;
 import lombok.extern.slf4j.Slf4j;
@@ -21,31 +21,31 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class OrganizationService {
+public class CircleService {
 
 	@Autowired
-	private OrganizationDao organizationDao;
+	private CircleDao circleDao;
 
-	public List<Organization> getAll(PageParameter pageParameter) {
-		OrganizationQuery searchKey =(OrganizationQuery) pageParameter.getSearchKey(OrganizationQuery.class);
-		Specification<Organization> spec = new Specification<Organization>() {
+	public List<Circle> getAll(PageParameter pageParameter) {
+		CircleQuery searchKey =(CircleQuery) pageParameter.getSearchKey(CircleQuery.class);
+		Specification<Circle> spec = new Specification<Circle>() {
 			@Override
-			public Predicate toPredicate(Root<Organization> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Circle> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				Predicate predicate = QueryHelp.getPredicate(root, searchKey, cb);
 				return predicate;
 			}
 		};
-		//根据查询条件，获取所有符合条件机构
-		List<Organization> organizationList = organizationDao.findAll(spec);
+		//根据查询条件，获取所有符合条件圈子
+		List<Circle> organizationList = circleDao.findAll(spec);
 		//为机构的子节点赋值
-		List<Organization> resoutList = new ArrayList<>();
+		List<Circle> resoutList = new ArrayList<>();
 		//ids应对搜索时，搜索结果无根节点情况；
 		Set<Integer> ids = new HashSet<>();
-		for (Organization orgOut : organizationList) {
+		for (Circle orgOut : organizationList) {
 			if(orgOut.getPid() == 0 ){
 				resoutList.add(orgOut);
 			}
-			for (Organization orgIn : organizationList) {
+			for (Circle orgIn : organizationList) {
 				if(orgOut.getId().equals(orgIn.getPid())){
 					if(orgOut.getChildren() == null){
 						orgOut.setChildren(new ArrayList<>());
@@ -69,43 +69,42 @@ public class OrganizationService {
 	 * @param updateOrg
 	 * @return
 	 */
-	public boolean update(Organization updateOrg) {
-		Organization org = organizationDao.getOne(updateOrg.getId());
-		org.setOrgName(updateOrg.getOrgName());
-		org.setBankCode(updateOrg.getBankCode());
+	public boolean update(Circle updateOrg) {
+		Circle org = circleDao.getOne(updateOrg.getId());
+		org.setName(updateOrg.getName());
 		org.setEnabled(updateOrg.getEnabled());
 		org.setPid(updateOrg.getPid());
-		organizationDao.save(org);
+		circleDao.save(org);
 		return true;
 	}
 
 	/**
-	 * 获取机构层级结构
+	 * 获取圈子层级结构
 	 * @return
 	 */
 	public List<Map<String, Object>> tree() {
-		//获取所有一级机构
-		List<Organization> byPid = organizationDao.findByPid(0);
-		//过滤掉禁用的机构
-		List<Organization> resoutList = byPid.stream().filter(org -> org.getEnabled()).collect(Collectors.toList());
+		//获取所有一级圈子
+		List<Circle> byPid = circleDao.findByPid(0);
+		//过滤掉禁用的圈子
+		List<Circle> resoutList = byPid.stream().filter(org -> org.getEnabled()).collect(Collectors.toList());
 		return getOrgTree(resoutList);
 	}
 
 	/**
-	 * 递归获取子机构map集合
+	 * 递归获取子圈子map集合
 	 * @param rootOrg
 	 * @return
 	 */
-	private List<Map<String,Object>> getOrgTree(List<Organization> rootOrg) {
+	private List<Map<String,Object>> getOrgTree(List<Circle> rootOrg) {
 		List<Map<String,Object>> list = new LinkedList<>();
 		rootOrg.forEach(org -> {
 					if (org!=null){
-						List<Organization> orgList = organizationDao.findByPid(org.getId());
-						List<Organization> collect = orgList.stream().filter(item -> item.getEnabled()).collect(Collectors.toList());
+						List<Circle> orgList = circleDao.findByPid(org.getId());
+						List<Circle> collect = orgList.stream().filter(item -> item.getEnabled()).collect(Collectors.toList());
 						Map<String,Object> map = new HashMap<>(16);
 						map.put("id",org.getId());
 						map.put("value",org.getId());
-						map.put("label",org.getOrgName());
+						map.put("label",org.getName());
 						if(collect!=null && collect.size()!=0){
 							map.put("children",getOrgTree(collect));
 						}
@@ -117,45 +116,45 @@ public class OrganizationService {
 	}
 
 	/**
-	 * 新增机构
+	 * 新增圈子
 	 * @param organization
 	 * @return
 	 */
-	public Boolean addOrganization(Organization organization) {
+	public Boolean addOrganization(Circle organization) {
 		organization.setCreateTime(new Date());
-		organizationDao.save(organization);
+		circleDao.save(organization);
 		return true;
 	}
 
 	/**
-	 * 删除机构及子机构
+	 * 删除机构及子圈子
 	 * @param id
 	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public Boolean del(Integer id) {
-		Organization org = organizationDao.getOne(id);
-		Assert.notNull(org,"删除机构不存在");
-		List<Organization> byPidList = organizationDao.findByPid(id);
+		Circle org = circleDao.getOne(id);
+		Assert.notNull(org,"删除圈子不存在");
+		List<Circle> byPidList = circleDao.findByPid(id);
 		HashSet set = new HashSet();
-		HashSet<Organization> delSet = getDelOrg(byPidList,set);
+		HashSet<Circle> delSet = getDelOrg(byPidList,set);
 		delSet.add(org);
-		for (Organization delorg : delSet) {
-			organizationDao.deleteById(delorg.getId());
+		for (Circle delorg : delSet) {
+			circleDao.deleteById(delorg.getId());
 		}
 		return true;
 	}
 
 	/**
-	 * 递归获取需删除机构
+	 * 递归获取需删除圈子
 	 * @param byPidList
 	 * @param resoutSet
 	 * @return
 	 */
-	private HashSet<Organization> getDelOrg(List<Organization> byPidList,HashSet<Organization> resoutSet) {
-		for (Organization org : byPidList) {
+	private HashSet<Circle> getDelOrg(List<Circle> byPidList,HashSet<Circle> resoutSet) {
+		for (Circle org : byPidList) {
 			resoutSet.add(org);
-			List<Organization> byPid = organizationDao.findByPid(org.getId());
+			List<Circle> byPid = circleDao.findByPid(org.getId());
 			if(byPid.size()>0){
 				getDelOrg(byPid,resoutSet);
 			}
@@ -164,16 +163,16 @@ public class OrganizationService {
 	}
 
 	/**
-	 * 查询所有启用状态的机构
+	 * 查询所有启用状态的圈子
 	 * @return
 	 */
 	public List<Map<String, Object>> getallEnabledOrgs() {
 		List<Map<String,Object>> resoutList = new LinkedList<>();
-		List<Organization> byEnabled = organizationDao.findByEnabled(true);
-		for (Organization org : byEnabled) {
+		List<Circle> byEnabled = circleDao.findByEnabled(true);
+		for (Circle org : byEnabled) {
 			Map<String,Object> map = new HashMap<>();
 			map.put("value",org.getId());
-			map.put("label",org.getOrgName());
+			map.put("label",org.getName());
 			resoutList.add(map);
 		}
 		return resoutList;

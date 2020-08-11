@@ -10,24 +10,22 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "t_organization", indexes = {@Index(name = "id", columnList = "id", unique = true),
+@Table(name = "t_circle", indexes = {@Index(name = "id", columnList = "id", unique = true),
 		@Index(name = "pid_Index", columnList = "pid")
 })
-public class Organization implements Serializable {
+public class Circle implements Serializable {
 
 	//IDENTITY：主键由数据库自动生成，即采用数据库ID自增长的方式，Oracle不支持这种方式。
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Integer id;
 
-	@Column(name = "pid", columnDefinition = "int(11) NOT NULL COMMENT '上级机构ID'")
+	@Column(name = "pid", columnDefinition = "int(11) NOT NULL COMMENT '上级圈子ID'")
 	private Integer pid;
 
-	@Column(name = "bank_code ", columnDefinition = "varchar(50) DEFAULT NULL COMMENT ' 交易法人银行代码（核心）'")
-	private String bankCode  ;
 
-	@Column(name = "org_name", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '机构名称'")
-	private String orgName ;
+	@Column(name = "name", columnDefinition = "varchar(255) DEFAULT NULL COMMENT '圈子名称'")
+	private String name ;
 
 	@Column(name ="enabled",nullable = false,columnDefinition = "int(1) DEFAULT 0 COMMENT '状态1:启用,0:禁用'")
 	private Boolean enabled;
@@ -37,6 +35,6 @@ public class Organization implements Serializable {
 	private Date createTime;
 
 	@Transient
-	private List<Organization> children;
+	private List<Circle> children;
 
 }

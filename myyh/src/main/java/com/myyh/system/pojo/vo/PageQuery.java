@@ -2,11 +2,9 @@ package com.myyh.system.pojo.vo;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
 
-import java.lang.reflect.Type;
 
 @Data
 public class PageQuery<T, Q> {
@@ -42,12 +40,4 @@ public class PageQuery<T, Q> {
         this.sort = sort;
         this.searchKey = searchKey;
     }
-
-    public Page<Q> getSortPage(Page<Q> page) {
-        OrderItem orderItem = sort.toLowerCase().startsWith("desc") ?
-                OrderItem.desc(sortField) : OrderItem.asc(sortField);
-        return  page.addOrder(orderItem);
-    }
-
-
 }
