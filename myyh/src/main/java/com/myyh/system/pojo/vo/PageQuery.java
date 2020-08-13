@@ -4,6 +4,7 @@ package com.myyh.system.pojo.vo;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 
 @Data
@@ -20,7 +21,17 @@ public class PageQuery<T, Q> {
     private T searchKey;
 
     public T getSearchKey(Class classzz) {
-        return (T) JSONObject.parseObject(this.searchKey.toString(),  classzz);
+        if(StringUtils.isEmpty(this.searchKey)){
+            try {
+                Object o = classzz.newInstance();
+                return (T) o;
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return (T) JSONObject.parseObject( this.searchKey.toString(),  classzz);
     }
 
     public Page<Q> getPage() {
