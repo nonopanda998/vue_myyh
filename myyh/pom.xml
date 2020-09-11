@@ -15,8 +15,10 @@
     <description>人言</description>
 
     <properties>
+        <start-class>com.myyh.RyApplication</start-class>
         <java.version>1.8</java.version>
         <jjwt.version>0.10.6</jjwt.version>
+        <docker.image.prefix>ry</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -193,9 +195,40 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork><!-- 没有该配置，devtools 不生效 -->
-                    <addResources>true</addResources>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <!--<fork>true</fork>&lt;!&ndash; 没有该配置，devtools 不生效 &ndash;&gt;-->
+                    <!--<addResources>true</addResources>-->
+                    <!--<outputDirectory>${project.build.directory}</outputDirectory>-->
+                    <includeSystemScope>true</includeSystemScope>
+                    <mainClass>${start-class}</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>ry-server</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
