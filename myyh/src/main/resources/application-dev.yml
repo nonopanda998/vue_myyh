@@ -43,7 +43,7 @@ spring:
     auto: true
     proxy-target-class: true
 server:
-  port: 8080
+  port: 8888
   servlet:
     context-path: /
 
@@ -71,8 +71,8 @@ rsa:
   private_key: MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEA3zoHVXjt5RGQ9v1IRjyIEio0SVE7DjY2+rQMFM3YUBLUZ4ySWYKc1DoOlGOvOR80yuZvm8KtTAOIzvVbZGETJQIDAQABAkEA1NkmCQ/n9pYLXhcghShOrtNjS82Su/hh8CchpeypJ58kdUT12UrZGrsLStzqhu6InwrrQwvi+Rg0pYJ4bIOhuQIhAPk+wVbF0WzaUy0fJYqjemQAP99NOqoO0CgCBeFMLka/AiEA5UbCWtM+qvnT2PhX0sAY4kUJN9Xlf41Z3PiomMyMoxsCIQC6FTlBcIVPsJyCxos/u5eny2vkaoNO7apJBGGheD/gfwIhANlx2WQgUp//Hl75cPlsvGzkQpDU6LqnCWIb5nI8FOmfAiBuiO2jOMnuq2dqwKmyPoBTQhNdzN23QDiljyew3HNbGg==
 # 文件存储路径
 file:
-  path: F:\eladmin\file\
-  avatar: F:\eladmin\avatar\
+  path: /data/file/
+  avatar: /data/avatar/
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5
@@ -87,7 +87,7 @@ logging:
     max-size: 5MB
     max-history: 3
     #和name一起配置只会生效一个，这里使用name
-    path: D:/admin/log
+    path: /data/log
   pattern:
 #    level: 用户:%X{user:-未登录} %5p
     level: :%X{user:-_MYYH} %10p
