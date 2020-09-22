@@ -195,19 +195,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!--<fork>true</fork>&lt;!&ndash; 没有该配置，devtools 不生效 &ndash;&gt;-->
-                    <!--<addResources>true</addResources>-->
-                    <!--<outputDirectory>${project.build.directory}</outputDirectory>-->
-                    <includeSystemScope>true</includeSystemScope>
-                    <mainClass>${start-class}</mainClass>
+                       <mainClass>${start-class}</mainClass>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>repackage</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
             </plugin>
 
             <plugin>
