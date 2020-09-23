@@ -1,6 +1,7 @@
 package com.myyh.system.pojo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author RY
@@ -23,6 +24,8 @@ public class Article implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId
+    private Integer id;
     /**
      * 标题
      */
