@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.myyh</groupId>
     <artifactId>myyh</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-RELEASE</version>
     <name>myyh</name>
     <description>人言</description>
 
@@ -195,7 +195,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                       <mainClass>${start-class}</mainClass>
+                    <mainClass>${start-class}</mainClass>
                 </configuration>
                 <!--<executions>-->
                     <!--<execution>-->
@@ -219,8 +219,10 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration>
-                    <repository>${project.build.finalName}</repository>
+                    <repository>ry-server</repository>
+                    <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
