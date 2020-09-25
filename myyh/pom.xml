@@ -195,7 +195,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>${start-class}</mainClass>
+                       <mainClass>${start-class}</mainClass>
                 </configuration>
                 <!--<executions>-->
                     <!--<execution>-->
@@ -219,7 +219,6 @@
                         </goals>
                     </execution>
                 </executions>
-
                 <configuration>
                     <repository>ry-server</repository>
                     <tag>${project.version}</tag>
