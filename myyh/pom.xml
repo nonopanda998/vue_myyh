@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.myyh</groupId>
     <artifactId>myyh</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.0</version>
     <name>myyh</name>
     <description>人言</description>
 
@@ -221,7 +221,6 @@
                 </executions>
                 <configuration>
                     <repository>${project.build.finalName}</repository>
-                    <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
