@@ -221,6 +221,7 @@
                 </executions>
 
                 <configuration>
+                    <contextDirectory>${project.basedir}/myyh</contextDirectory>
                     <repository>ry-server</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
