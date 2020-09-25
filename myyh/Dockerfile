@@ -6,5 +6,5 @@ MAINTAINER The ry project <859946068@qq.com>
 EXPOSE 8888
 
 ARG JAR_FILE
-ADD ${JAR_FILE} app.jar
+ADD myyh/target/${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
